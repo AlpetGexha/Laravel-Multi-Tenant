@@ -16,8 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return to_route('dashboard');
+    return redirect()->route('dashboard');
 });
+
+Route::get('/admin/login', function () {
+    return redirect()->route('login');
+});
+
 
 Route::group([
     'middleware' => ['auth', 'verified'],
