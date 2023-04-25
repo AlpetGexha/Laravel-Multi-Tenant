@@ -43,6 +43,15 @@ class TeamPolicy
     }
 
     /**
+     * Change Domain Name
+     */
+
+    public function domain(User $user, Team $team): bool
+    {
+        return $user->ownsTeam($team);
+    }
+
+    /**
      * Determine whether the user can add team members.
      */
     public function addTeamMember(User $user, Team $team): bool

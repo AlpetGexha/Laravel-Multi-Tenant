@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +16,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return to_route('dashboard');
+});
+
+Route::group([
+    'middleware' => ['auth', 'verified'],
+    'controller' => PostController::class,
+    'prefix' => 'post',
+    'as' => 'post.',
+], function () {
+
+    Route::get('/', 'index')->name('index');
+    Route::get('{post}', 'single')->name('single')->scopeBindings();
+});
+
+Route::domain('{domain}.localhost')->group(function () {
+    Route::get('/', function ($domain) {
+        return Post::all();
+    });
 });
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified'
+    'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 });
